@@ -55,6 +55,7 @@ dadoAtleta* realoca(dadoAtleta atleta[], int &tam){
 dadoAtleta* F_GET_CSV(dadoAtleta *atleta, int &tam){
     ifstream arq("data_athlete_event.csv");
     if(!arq){
+        cout<<"Error in csv"<<endl;
         return 0;
     }
     string name;

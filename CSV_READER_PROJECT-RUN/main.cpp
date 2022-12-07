@@ -46,21 +46,11 @@ class dadoAtleta{
             cout<<this->noc<<endl;
         }
 };
-
-dadoAtleta* realoca(dadoAtleta *atleta, int &tam);
-dadoAtleta* F_GET_CSV(dadoAtleta *atleta, int &tam);
-
-
-dadoAtleta* realoca(dadoAtleta atleta[], int &tam){
-    dadoAtleta *novo=new dadoAtleta[tam+1];
-    copy(atleta, atleta+tam, novo);
-    tam++;
-    delete[]atleta;
-    return novo;
-}
-dadoAtleta* F_GET_CSV(dadoAtleta *atleta, int &tam){
+dadoAtleta* F_GET_CSV();
+dadoAtleta* F_GET_CSV(){
     ifstream arq("data_athlete_event.csv");
     if(!arq){
+        cout<<"Error in csv"<<endl;
         return 0;
     }
     string name;
@@ -71,6 +61,8 @@ dadoAtleta* F_GET_CSV(dadoAtleta *atleta, int &tam){
         cont++;
     }
     cont--;
+    const int pass=cont;
+    dadoAtleta *atleta=new dadoAtleta[pass];
     arq.clear();
     arq.close();
     arq.open("data_athlete_event.csv");
@@ -85,7 +77,6 @@ dadoAtleta* F_GET_CSV(dadoAtleta *atleta, int &tam){
         getline(tmp,campos[cont_campos], ','); //obter id;
         cont_campos++;
         while(cont_campos<6){
-            atleta=realoca(atleta, tam);
             char n=tmp.peek();
             if(n=='"'){
                 getline(tmp,campos[cont_campos], '"');
@@ -114,7 +105,7 @@ dadoAtleta* F_GET_CSV(dadoAtleta *atleta, int &tam){
             }
         }
         cont_campos=0;
-        if(percorrer<tam){
+        if(percorrer<pass){
             atleta[percorrer].dados(campos);
             percorrer++;
         }
@@ -129,10 +120,16 @@ dadoAtleta* F_GET_CSV(dadoAtleta *atleta, int &tam){
     return atleta;
 }
 int main(){
-    int tam=0;
-    dadoAtleta *atleta=new dadoAtleta[tam];
-    atleta=F_GET_CSV(atleta, tam);
-    atleta[106].list();
+    dadoAtleta *atleta=F_GET_CSV();
+    if(atleta==0){
+		return 0;
+	}
+	//-----AMBIENTE APENAS PARA TESTE APAGUE-ME----->IN
+	cout<<"Olá tester, insira a id de algum atleta para acessar as info dele. "<<endl;
+	int teste;
+	cin>>teste;
+	atleta[teste].list();
+    //----------------------------------------------OUT
 
     return 0;
 }
